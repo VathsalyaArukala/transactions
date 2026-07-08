@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Fraud Detection</title>
+
+<style>
+body {
+    font-family: Arial;
+    margin: 0;
+    background: linear-gradient(135deg,#0f172a,#1e293b);
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px;
+    color: #38bdf8;
+}
+
+.container {
+    width: 85%;
+    margin: auto;
+}
+
+.card, .form-box {
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.safe { color: #22c55e; font-weight: bold; }
+.fraud { color: #ef4444; font-weight: bold; }
+
+.progress {
+    background: #333;
+    height: 10px;
+    border-radius: 10px;
+}
+
+.bar {
+    height: 10px;
+    border-radius: 10px;
+}
+
+.safe-bar { background: #22c55e; }
+.fraud-bar { background: #ef4444; }
+
+img {
+    width: 300px;
+    margin-top: 10px;
+}
+
+@media(max-width:900px){
+    .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Fraud Detection For Online Transaction</h1>
+
+<div class="container">
+
+<div class="form-box">
+<form method="POST">
+
+<input name="sender_id" placeholder="Sender ID" required><br><br>
+<input name="receiver_id" placeholder="Receiver ID" required><br><br>
+<input type="number" name="amount" placeholder="Amount" required><br><br>
+
+<select name="transaction_type">
+<option value="UPI">UPI</option>
+<option value="CARD">CARD</option>
+<option value="NETBANKING">NETBANKING</option>
+</select><br><br>
+
+<select name="sender_fraud_history">
+<option value="0">Sender Safe</option>
+<option value="1">Sender Fraud</option>
+</select><br><br>
+
+<select name="receiver_fraud_history">
+<option value="0">Receiver Safe</option>
+<option value="1">Receiver Fraud</option>
+</select><br><br>
+<select name="actual_label">
+    <option value="0">Actual Safe</option>
+    <option value="1">Actual Fraud</option>
+    </select><br><br>
+
+<button type="submit">Check Fraud</button>
+
+</form>
+</div>
+
+{% if sender_result %}
+<div class="cards">
+
+<div class="card">
+<h3>Sender</h3>
+<p class="{{ sender_result }}">{{ sender_result }}</p>
+<p>{{ sender_prob }}</p>
+</div>
+
+<div class="card">
+<h3>Receiver</h3>
+<p class="{{ receiver_result }}">{{ receiver_result }}</p>
+<p>{{ receiver_prob }}</p>
+</div>
+
+<div class="card">
+<h3>Overall</h3>
+<p class="{{ overall_result }}">{{ overall_result }}</p>
+<p>{{ overall_prob }}</p>
+</div>
+
+</div>
+{% endif %}
+
+{% if cm_image %}
+<div class="card">
+<h2>Live Confusion Matrix</h2>
+<img src="{{ url_for('static', filename=cm_image) }}">
+</div>
+{% endif %}
+{% if accuracy %}
+<div class="card">
+<h2>Model Performance</h2>
+
+<p>Accuracy: {{ accuracy }}%</p>
+<div class="progress"><div class="bar safe-bar" style="width: {{ accuracy }}%;"></div></div>
+
+<p>Precision: {{ precision}}%</p>
+<div class="progress"><div class="bar fraud-bar" style="width: {{ precision}}%;"></div></div>
+
+<p>Recall: {{ recall }}%</p>
+<div class="progress"><div class="bar safe-bar" style="width: {{ recall }}%;"></div></div>
+
+<p>F1 Score: {{ f1 }}%</p>
+<div class="progress"><div class="bar fraud-bar" style="width: {{ f1 }}%;"></div></div>
+
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>

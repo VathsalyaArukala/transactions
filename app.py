@@ -100,7 +100,7 @@ def home():
             y_pred.append(pred_label)
 
             cm_image = generate_cm()
-            accuracy = precision = recall = f1 = 0
+            accuracy = precision = recall = f1  = None
 
             if len(y_true) >= 2:
                 accuracy = accuracy_score(y_true, y_pred)
@@ -113,7 +113,8 @@ def home():
                 precision=round(precision*100,2)
                 recall=round(recall*100,2)
                 f1=round(f1*100,2)
-
+            print("Actual: ",actual, "Predicted: ",pred_label)
+            print("y_true:",y_true,"y_pred: ",y_pred)
             return render_template("index.html",
                 sender_result=sender_result,
                 receiver_result=receiver_result,

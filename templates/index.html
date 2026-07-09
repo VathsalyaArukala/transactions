@@ -151,18 +151,19 @@ img {
 <img src="{{ url_for('static', filename=cm_image) }}">
 </div>
 {% endif %}
-{% if accuracy %}
+{% if accuracy is not none %}
 <div class="card">
 <h2>Model Performance</h2>
 
 <p>Accuracy: {{ accuracy }}%</p>
-<div class="progress"><div class="bar safe-bar" style="width: {{ accuracy }}%;"></div></div>
+<div class="progress">
+    <div class="bar safe-bar" style="width: {{ accuracy  }}%;"></div></div>
 
 <p>Precision: {{ precision}}%</p>
-<div class="progress"><div class="bar fraud-bar" style="width: {{ precision}}%;"></div></div>
+<div class="progress"><div class="bar fraud-bar" style="width: {{ precision }}%;"></div></div>
 
 <p>Recall: {{ recall }}%</p>
-<div class="progress"><div class="bar safe-bar" style="width: {{ recall }}%;"></div></div>
+<div class="progress"><div class="bar safe-bar" style="width: {{ recall}}%;"></div></div>
 
 <p>F1 Score: {{ f1 }}%</p>
 <div class="progress"><div class="bar fraud-bar" style="width: {{ f1 }}%;"></div></div>
